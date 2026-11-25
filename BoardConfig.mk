@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+DEVICE_PATH := device/samsung/a70q
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
@@ -42,7 +44,7 @@ TARGET_USES_UEFI := true
 TARGET_BOARD_PLATFORM := sm6150
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno612
 
-# Kernel
+# Kernel (prebuilt, taken from the Lineage 22.2 a70q recovery image)
 BOARD_KERNEL_CMDLINE := console=null androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=1 androidboot.usbcontroller=a600000.dwc3 firmware_class.path=/vendor/firmware_mnt/image nokaslr printk.devkmsg=on loop.max_part=7 androidboot.avb_version=1.0 androidboot.vbmeta.avb_version=1.0 androidboot.boot_devices=soc/1d84000.ufshc
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
@@ -50,24 +52,18 @@ BOARD_KERNEL_OFFSET      := 0x00008000
 BOARD_KERNEL_TAGS_OFFSET := 0x01e00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
 BOARD_SECOND_OFFSET      := 0x00f00000
-BOARD_NAME               := SRPRL06C001
+BOARD_NAME               := SRPRL06C005
 BOARD_HEADER_VERSION     := 1
 BOARD_MKBOOTIMG_ARGS     := --kernel_offset $(BOARD_KERNEL_OFFSET) --ramdisk_offset $(BOARD_RAMDISK_OFFSET) --tags_offset $(BOARD_KERNEL_TAGS_OFFSET) --second_offset $(BOARD_SECOND_OFFSET) --header_version $(BOARD_HEADER_VERSION) --board $(BOARD_NAME)
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
-TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_SOURCE := kernel/samsung/a70q
-TARGET_KERNEL_CONFIG := a70q_defconfig
-BOARD_KERNEL_SEPARATED_DTBO := true
-TARGET_KERNEL_CLANG_COMPILE := true
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
+BOARD_INCLUDE_RECOVERY_DTBO := true
 
-# QCOM
-TARGET_USE_SDCLANG := true
-
-# Avb
-BOARD_AVB_ENABLE := true
-BOARD_AVB_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+# Avb (disabled for recovery build)
+# BOARD_AVB_ENABLE := true
+# BOARD_AVB_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144
@@ -94,17 +90,21 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
 
 # Recovery
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 BOARD_HAS_LARGE_FILESYSTEM := true
-BOARD_INCLUDE_RECOVERY_DTBO := true
 LZMA_RAMDISK_TARGETS := recovery
+
+# Screen / theme
+TARGET_SCREEN_WIDTH := 1080
+TARGET_SCREEN_HEIGHT := 2400
+TW_THEME := portrait_hdpi
 
 # Crypto
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_FBE := true
 
 # TWRP specific build flags
-TW_THEME := portrait_hdpi
 RECOVERY_SDCARD_ON_DATA := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
@@ -115,7 +115,7 @@ TW_DEFAULT_BRIGHTNESS := 180
 TW_NO_REBOOT_BOOTLOADER := true
 TW_HAS_DOWNLOAD_MODE := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_EXTRA_LANGUAGES := true
+TW_EXTRA_LANGUAGES := false
 TW_INCLUDE_NTFS_3G := true
 TW_Y_OFFSET := 77
 TW_H_OFFSET := -77
