@@ -17,10 +17,10 @@
 # Release name
 PRODUCT_RELEASE_NAME := a70q
 
-$(call inherit-product, build/target/product/embedded.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/embedded.mk)
 
-# Inherit from our custom product configuration
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+# Inherit from the recovery vendor config
+$(call inherit-product, vendor/twrp/config/common.mk)
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := a70q
