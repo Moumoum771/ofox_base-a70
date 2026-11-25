@@ -1,1 +1,1 @@
-add_lunch_combo lineage_a70q-eng
+add_lunch_combo fox_a70q-eng
