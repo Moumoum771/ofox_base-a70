@@ -15,4 +15,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_a70q.mk
+    $(LOCAL_DIR)/fox_a70q.mk
+
+COMMON_LUNCH_CHOICES := \
+    fox_a70q-eng
